@@ -121,6 +121,28 @@ p {
 .input-group input:focus {
     border-color: #4A90E2;
 }
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* Ensure space for the eye icon */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+}
+
+.toggle-password:hover {
+  color: #333;
+}
+
 
 .btn {
     width: 100%;

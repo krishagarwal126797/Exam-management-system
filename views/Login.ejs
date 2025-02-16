@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <link rel="stylesheet" href="/style.css">
     <script defer src="/script.js"></script>
 </head>
@@ -33,9 +35,15 @@
                     <input type="text" id="username" name="username" required>
                 </div>
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
+                  <label for="password">Password</label>
+                  <div class="password-wrapper">
+                      <input type="password" id="password" name="password" required>
+                      <span class="toggle-password">
+                          <i class="fas fa-eye"></i>
+                      </span>
+                  </div>
+              </div>
+              
                 <button type="submit" class="btn">Login</button>
                 <p class="switch-mode" style="padding: 10px;">Don't have an account? <a href="/register">Register</a></p>
             </form>
