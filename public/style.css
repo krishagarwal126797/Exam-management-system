@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('images/Loginbacklight.jpg');
+   background-size: cover;
+    position: relative;
+}
+
+/* Background Shapes */
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.2);
+    filter: blur(80px);
+    border-radius: 50%;
+    border: 10px solid white;
+}
+
+.shape1 { width: 200px; height: 200px; top: 10%; left: 10%; }
+.shape2 { width: 250px; height: 250px; bottom: 10%; right: 15%; }
+.shape3 { width: 150px; height: 150px; bottom: 30%; left: 40%; }
+
+/* Container */
+.container {
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    height: 65vh;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Left Side Image */
+.image-section {
+  position: relative;
+  width: 50%;
+  height: auto;
+  z-index: 1;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  
+ 
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.overlay-text p {
+  font-size: 1rem;
+  font-weight: normal;
+  margin-top: 10px;
+}
+
+
+/* Login Card */
+.login-card {
+    flex: 1;
+    z-index: 1;
+    padding: 40px;
+    text-align: center;
+    background: white;
+}
+
+h2 {
+    font-size: 26px;
+    color: #333;
+}
+
+p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #555;
+    display: block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #4A90E2;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background: #4A90E2;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #357ABD;
+}
+
+/* Light/Dark Mode Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Dark Mode */
+.dark-mode {
+   background-image: url('images/Loginbackdark.jpg');
+   background-size: cover;
+    color: white;
+}
+
+.dark-mode .login-card {
+    background: #1E1E1E;
+}
+.dark-mode h2{
+  color: #ddd;
+}
+.dark-mode p{
+  color: #ddd;
+}
+.dark-mode label{
+  color: #ddd;
+}
+.dark-mode a{
+  color: bisque;
+}
+.dark-mode input {
+    background: #333;
+    color: white;
+}
+
+.dark-mode .btn {
+    background: #FF4081;
+}
+
+.dark-mode .btn:hover {
+    background: #E91E63;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

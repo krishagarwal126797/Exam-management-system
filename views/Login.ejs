@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/style.css">
+    <script defer src="/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Background Shapes -->
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+
+        <!-- Left Side Image Section -->
+        <div class="image-section">
+            <img src="/images/Login.jpg" alt="Login Illustration">
+            <div class="overlay-text">
+                <h1>Welcome to Exam Management</h1>
+                <p>Manage your exams efficiently with ease</p>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-card">
+            <h2>Welcome Back</h2>
+            <p>Please login to your account</p>
+            <form action="/login" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p class="switch-mode" style="padding: 10px;">Don't have an account? <a href="/register">Register</a></p>
+            </form>
+            <button class="theme-toggle">🌙</button>
+        </div>
+    </div>
+</body>
+</html>
