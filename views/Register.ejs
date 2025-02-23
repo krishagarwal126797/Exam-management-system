@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Register Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link rel="stylesheet" href="/style.css">
     <script defer src="/script.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="height: 85vh; ">
         <!-- Background Shapes -->
         <div class="shape shape1"></div>
         <div class="shape shape2"></div>
@@ -18,17 +18,14 @@
 
         <!-- Left Side Image Section -->
         <div class="image-section">
-            <img src="/images/Login.jpg" alt="Login Illustration">
-            <div class="overlay-text">
-                <h1>Welcome to Exam Management</h1>
-                <p>Manage your exams efficiently with ease</p>
-            </div>
+            <img src="/images/register.png" alt="Login Illustration">
+         
         </div>
 
         <!-- Login Form -->
         <div class="login-card">
-            <h2>Welcome Back</h2>
-            <p>Please login to your account</p>
+            <h2>Exam Management Syatm</h2>
+            <p>Please Register to your account</p>
             <form action="/login" method="POST">
                 <div class="input-group">
                     <label for="username">Username</label>
@@ -43,9 +40,17 @@
                       </span>
                   </div>
               </div>
+              <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+              <label for="Facuilty">Facuilty</label>
+              <input type="text" id="Facuilty" name="Facuilty" required>
+          </div>
               
-                <button type="submit" class="btn">Login</button>
-                <p class="switch-mode" style="padding: 10px;">Don't have an account? <a href="/Register">Register</a></p>
+                <button type="submit" class="btn">Register</button>
+                <p class="switch-mode" style="padding: 10px;">Already have an account? <a href="/">Login</a></p>
             </form>
             <button class="theme-toggle">🌙</button>
         </div>
