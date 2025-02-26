@@ -17,4 +17,11 @@ router.get("/Register", async (req, res) => {
 
   
 });
+router.get("/Dashboard", async (req, res) => {
+ 
+   
+    res.render('Dashboard', { title: 'Dashboard Page' });
+
+  
+});
 export default router;
