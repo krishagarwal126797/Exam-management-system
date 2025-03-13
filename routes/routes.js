@@ -24,4 +24,49 @@ router.get("/Dashboard", async (req, res) => {
 
   
 });
+router.get("/Menu", async (req, res) => {
+ 
+   
+    res.render('Menu', { title: 'Menu Page' });
+
+  
+});
+router.get("/Manageexams", async (req, res) => {
+ 
+   
+    res.render('Manageexams', { title: 'Manageexams Page' });
+
+  
+});
+router.get("/Managestudents", async (req, res) => {
+ 
+   
+    res.render('ManageStudents', { title: 'Managestudents Page' });
+
+  
+});
+router.get("/Manageresults", async (req, res) => {
+ 
+   
+    res.render('Manageresults', { title: 'Manageresults Page' });
+
+  
+});
+
+router.get("/UserManagement", async (req, res) => {
+ 
+   
+    res.render('Usermanagement', { title: 'Usermanagement Page' });
+
+  
+});
+
+router.get("/Settings", async (req, res) => {
+ 
+   
+    res.render('Settings', { title: 'Settings Page' });
+
+  
+});
+
 export default router;

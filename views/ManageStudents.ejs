@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: linear-gradient(to right, #141E30, #243B55);
+            transition: 0.3s;
+            overflow-x: hidden;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #ff4b2b;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: rgba(17, 15, 68, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            left: -250px;
+            padding: 20px;
+            z-index: 1;
+            transition: all 0.4s ease-in-out;
+            border-right: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar .logo {
+            color: #fff;
+            position: relative;
+            top: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            padding: 15px 10px;
+            color: #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        .sidebar ul li i {
+            width: 30px;
+        }
+
+        .sidebar ul li.active,
+        .sidebar ul li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: translateX(10px);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .toggle-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .dashboard-content {
+            margin-left: 0;
+            padding: 20px;
+            width: 100%;
+            transition: 0.4s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .student-table {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .student-table table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        .student-table th, .student-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .modal input, .modal select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .modal input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .modal input:focus, .modal select:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal button {
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .modal button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+        }
+
+        button {
+            width: 70px;
+            height: 30px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-bar input, .search-bar select {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 16px;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-bar input:focus, .search-bar select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .sortable:after {
+            content: '↕';
+            position: absolute;
+            right: 5px;
+            opacity: 0.5;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            border-radius: 5px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .toast.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .confirm-modal .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .confirm-modal button {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #ff4b2b;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .student-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <span class="close-btn"><i class="fa fa-times"></i></span>
+        <div class="logo" style="position: relative; left: 30px;">Exam Manager</div>
+        <ul>
+            <li><a href="dashboard"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="manageexams"><i class="fa fa-file-alt"></i> Manage Exams</a></li>
+            <li class="active"><i class="fa fa-users"></i> Students</li>
+            <li><i class="fa fa-chart-bar"></i> Results</li>
+            <li><i class="fa fa-cogs"></i> Settings</li>
+        </ul>
+    </div>
+
+    <div class="toggle-btn"><i class="fa fa-bars"></i></div>
+    <div class="dashboard-content">
+        <div class="header">
+            <h2 style="position: relative; left: 30px;">Manage Students</h2>
+            <div>
+                <button onclick="openModal()" style="background-color: forestgreen; color: #fff;">+ Add Student</button>
+                <i class="fa fa-moon dark-mode-toggle" onclick="toggleDarkMode()"></i>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="searchStudent" placeholder="Search students...">
+            <select id="filterGrade">
+                <option value="">All Grades</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+            </select>
+        </div>
+
+        <div class="student-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="sortable" data-sort="id">Student ID</th>
+                        <th class="sortable" data-sort="name">Full Name</th>
+                        <th class="sortable" data-sort="grade">Grade</th>
+                        <th class="sortable" data-sort="email">Email</th>
+                        <th class="sortable" data-sort="phone">Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <tr>
+                        <td>STU001</td>
+                        <td>John Doe</td>
+                        <td>Grade 10</td>
+                        <td>john.doe@email.com</td>
+                        <td>+1234567890</td>
+                        <td>
+                            <button onclick="viewStudent(this)" style="background-color: #4CAF50; color: #fff;">View</button>
+                            <button onclick="editStudent(this)" style="background-color: rgb(253, 221, 42); color: #fff;">Edit</button>
+                            <button onclick="confirmDelete(this)" style="background-color: rgb(252, 48, 48); color: #fff;">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" id="studentModal">
+        <h3 id="modalTitle">Add Student</h3>
+        <form id="studentForm" onsubmit="handleStudentSubmit(event)">
+            <div class="student-details">
+                <div>
+                    <input type="text" placeholder="Student ID" id="studentId" required>
+                    <div class="error-message" id="idError"></div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Full Name" id="studentName" required>
+                    <div class="error-message" id="nameError"></div>
+                </div>
+                <div>
+                    <select id="studentGrade" required>
+                        <option value="">Select Grade</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                    </select>
+                    <div class="error-message" id="gradeError"></div>
+                </div>
+                <div>
+                    <input type="email" placeholder="Email" id="studentEmail" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                <div>
+                    <input type="tel" placeholder="Phone Number" id="studentPhone" required>
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Parent Name" id="parentName" required>
+                    <div class="error-message" id="parentError"></div>
+                </div>
+            </div>
+            <button type="submit" id="submitBtn">Add</button>
+            <button type="button" onclick="closeModal()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="confirm-modal" id="confirmModal">
+        <h3>Delete Student</h3>
+        <p>Are you sure you want to delete this student?</p>
+        <div class="buttons">
+            <button onclick="deleteStudent()" style="background-color: rgb(252, 48, 48);">Delete</button>
+            <button onclick="closeConfirmModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let currentSort = { column: '', direction: 'asc' };
+        let studentToDelete = null;
+        let editingRow = null;
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function validateForm() {
+            const id = document.getElementById('studentId').value;
+            const name = document.getElementById('studentName').value;
+            const email = document.getElementById('studentEmail').value;
+            const phone = document.getElementById('studentPhone').value;
+            let isValid = true;
+
+            if (!id.match(/^STU\d{3}$/)) {
+                document.getElementById('idError').textContent = 'ID must be in format: STU001';
+                document.getElementById('idError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (name.length < 3) {
+                document.getElementById('nameError').textContent = 'Name must be at least 3 characters';
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!phone.match(/^\+?\d{10,12}$/)) {
+                document.getElementById('phoneError').textContent = 'Please enter a valid phone number';
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function handleStudentSubmit(event) {
+            event.preventDefault();
+            if (!validateForm()) return;
+
+            const id = document.getElementById('studentId').value;
+            const name = document.getElementById('studentName').value;
+            const grade = document.getElementById('studentGrade').value;
+            const email = document.getElementById('studentEmail').value;
+            const phone = document.getElementById('studentPhone').value;
+
+            if (editingRow) {
+                updateStudent(id, name, grade, email, phone);
+            } else {
+                addStudent(id, name, grade, email, phone);
+            }
+        }
+
+        function addStudent(id, name, grade, email, phone) {
+            const table = document.querySelector('#studentTableBody');
+            const row = `<tr>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${grade}</td>
+                <td>${email}</td>
+                <td>${phone}</td>
+                <td>
+                    <button onclick="viewStudent(this)" style="background-color: #4CAF50; color: #fff;">View</button>
+                    <button onclick="editStudent(this)" style="background-color: rgb(253, 221, 42); color: #fff;">Edit</button>
+                    <button onclick="confirmDelete(this)" style="background-color: rgb(252, 48, 48); color: #fff;">Delete</button>
+                </td>
+            </tr>`;
+            table.innerHTML += row;
+            closeModal();
+            showToast('Student added successfully');
+        }
+
+        function updateStudent(id, name, grade, email, phone) {
+            const cells = editingRow.getElementsByTagName('td');
+            cells[0].textContent = id;
+            cells[1].textContent = name;
+            cells[2].textContent = grade;
+            cells[3].textContent = email;
+            cells[4].textContent = phone;
+            editingRow = null;
+            document.getElementById('modalTitle').textContent = 'Add Student';
+            document.getElementById('submitBtn').textContent = 'Add';
+            closeModal();
+            showToast('Student updated successfully');
+        }
+
+        function viewStudent(button) {
+            const row = button.closest('tr');
+            const cells = row.getElementsByTagName('td');
+            const studentInfo = {
+                id: cells[0].textContent,
+                name: cells[1].textContent,
+                grade: cells[2].textContent,
+                email: cells[3].textContent,
+                phone: cells[4].textContent
+            };
+            
+            alert(`Student Details:\n\nID: ${studentInfo.id}\nName: ${studentInfo.name}\nGrade: ${studentInfo.grade}\nEmail: ${studentInfo.email}\nPhone: ${studentInfo.phone}`);
+        }
+
+        function editStudent(button) {
+            editingRow = button.closest('tr');
+            const cells = editingRow.getElementsByTagName('td');
+            
+            document.getElementById('studentId').value = cells[0].textContent;
+            document.getElementById('studentName').value = cells[1].textContent;
+            document.getElementById('studentGrade').value = cells[2].textContent;
+            document.getElementById('studentEmail').value = cells[3].textContent;
+            document.getElementById('studentPhone').value = cells[4].textContent;
+            
+            document.getElementById('modalTitle').textContent = 'Edit Student';
+            document.getElementById('submitBtn').textContent = 'Update';
+            openModal();
+        }
+
+        function confirmDelete(button) {
+            studentToDelete = button.closest('tr');
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function deleteStudent() {
+            if (studentToDelete) {
+                studentToDelete.remove();
+                showToast('Student deleted successfully');
+            }
+            closeConfirmModal();
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            studentToDelete = null;
+        }
+
+        function openModal() {
+            document.getElementById('studentModal').style.display = 'block';
+            document.querySelectorAll('.error-message').forEach(err => err.style.display = 'none');
+        }
+
+        function closeModal() {
+            document.getElementById('studentModal').style.display = 'none';
+            document.getElementById('studentForm').reset();
+            editingRow = null;
+            document.getElementById('modalTitle').textContent = 'Add Student';
+            document.getElementById('submitBtn').textContent = 'Add';
+        }
+
+        // Search and filter functionality
+        document.getElementById('searchStudent').addEventListener('input', filterTable);
+        document.getElementById('filterGrade').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const searchText = document.getElementById('searchStudent').value.toLowerCase();
+            const gradeFilter = document.getElementById('filterGrade').value;
+            const rows = document.getElementById('studentTableBody').getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const name = row.cells[1].textContent.toLowerCase();
+                const grade = row.cells[2].textContent;
+                const email = row.cells[3].textContent.toLowerCase();
+                
+                const textMatch = name.includes(searchText) || email.includes(searchText);
+                const gradeMatch = !gradeFilter || grade.includes(`Grade ${gradeFilter}`);
+                
+                row.style.display = textMatch && gradeMatch ? '' : 'none';
+            }
+        }
+
+        // Sorting functionality
+        document.querySelectorAll('.sortable').forEach(header => {
+            header.addEventListener('click', () => {
+                const column = header.dataset.sort;
+                const direction = currentSort.column === column && currentSort.direction === 'asc' ? 'desc' : 'asc';
+                sortTable(column, direction);
+                currentSort = { column, direction };
+            });
+        });
+
+        function sortTable(column, direction) {
+            const tbody = document.getElementById('studentTableBody');
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            rows.sort((a, b) => {
+                let aValue = a.cells[getColumnIndex(column)].textContent;
+                let bValue = b.cells[getColumnIndex(column)].textContent;
+                
+                if (aValue < bValue) return direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function getColumnIndex(column) {
+            const columns = { id: 0, name: 1, grade: 2, email: 3, phone: 4 };
+            return columns[column];
+        }
+
+        // Initialize
+        window.onload = () => {
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        };
+
+        $('.toggle-btn').click(() => $('.sidebar').toggleClass('active'));
+        $('.close-btn').click(() => {
+            $('.sidebar').removeClass('active');
+            $('.dashboard-content').removeClass('shifted');
+        });
+    </script>
+</body>
+</html>
