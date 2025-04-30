@@ -101,6 +101,10 @@
             color: #fff;
             transition: 0.3s;
         }
+        a{
+            text-decoration: none;
+            color: white;
+        }
 
         .toggle-btn:hover {
             transform: rotate(90deg);
@@ -238,16 +242,30 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <span class="close-btn"><i class="fa fa-times"></i></span>
+        <span class="close-btn"><i class="fa fa-times"></i></span>
         <div class="logo" style="position: relative; left: 30px;">Exam Manager</div>
         <ul>
-            <li class="active"><i class="fa fa-tachometer-alt"></i> Dashboard</li>
-            <li><i class="fa fa-file-alt"></i> Manage Exams</li>
-            <li><i class="fa fa-users"></i> Students</li>
-            <li><i class="fa fa-chart-bar"></i> Results</li>
-            <li><i class="fa fa-cogs"></i> Settings</li>
+          <li class="active">
+            <a href="/Dashboard"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="/Manageexams"><i class="fa fa-file-alt"></i> Manage Exams</a>
+          </li>
+          <li>
+            <a href="/Managestudents"><i class="fa fa-users"></i> Students</a>
+          </li>
+          <li>
+            <a href="/Manageresults"><i class="fa fa-chart-bar"></i> Results</a>
+          </li>
+          <li>
+            <a href="/Settings"><i class="fa fa-cogs"></i> Settings</a>
+          </li>
+          <li>
+            <a href="/logout" style="color: red;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+          </li>
         </ul>
-    </div>
+      </div>
+      
 
     <!-- Toggle Button -->
     <div class="toggle-btn"><i class="fa fa-bars"></i></div>

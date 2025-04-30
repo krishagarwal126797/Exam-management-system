@@ -319,13 +319,26 @@
         <span class="close-btn"><i class="fa fa-times"></i></span>
         <div class="logo" style="position: relative; left: 30px;">Exam Manager</div>
         <ul>
-            <li><a href="dashboard"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="manageexams"><i class="fa fa-file-alt"></i> Manage Exams</a></li>
-            <li><a href="managestudents"><i class="fa fa-users"></i> Students</a></li>
-            <li class="active"><i class="fa fa-chart-bar"></i> Results</li>
-            <li><i class="fa fa-cogs"></i> Settings</li>
+          <li class="active">
+            <a href="/Dashboard" style="text-decoration: none; color: #ddd;"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="/Manageexams"  style="text-decoration: none; color: #ddd;"><i class="fa fa-file-alt"></i> Manage Exams</a>
+          </li>
+          <li>
+            <a href="/Managestudents" style="text-decoration: none; color: #ddd;"><i class="fa fa-users"></i> Students</a>
+          </li>
+          <li>
+            <a href="/Manageresults" style="text-decoration: none; color: #ddd;"><i class="fa fa-chart-bar"></i> Results</a>
+          </li>
+          <li>
+            <a href="/Settings"  style="text-decoration: none; color: #ddd;"><i class="fa fa-cogs"></i> Settings</a>
+          </li>
+          <li>
+            <a href="/logout" style="color: red;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+          </li>
         </ul>
-    </div>
+      </div>
 
     <div class="toggle-btn"><i class="fa fa-bars"></i></div>
     <div class="dashboard-content">
@@ -429,6 +442,65 @@
         let currentSort = { column: '', direction: 'asc' };
         let resultToDelete = null;
         let editingRow = null;
+// Submit result
+async function handleResultSubmit(event) {
+  event.preventDefault();
+  const studentName = document.getElementById('studentSelect').value;
+  const examName = document.getElementById('examSelect').value;
+  const marks = document.getElementById('marks').value;
+  const examDate = document.getElementById('examDate').value;
+
+  const result = { studentName, examName, marks, examDate };
+
+  try {
+    const res = await fetch('/Manageresults', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result)
+    });
+
+    if (!res.ok) throw new Error('Failed to add result');
+    await fetchAndRenderResults();
+    closeModal();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// Fetch and render results
+async function fetchAndRenderResults() {
+  const res = await fetch('/Manageresults');
+  const results = await res.json();
+  const tbody = document.getElementById('resultTableBody');
+  tbody.innerHTML = '';
+
+  results.forEach(result => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${result.studentName}</td>
+      <td>${result.examName}</td>
+      <td>${result.marks}</td>
+      <td>${new Date(result.examDate).toLocaleDateString()}</td>
+      <td>
+        <button onclick='editResult(${JSON.stringify(result)})'>Edit</button>
+        <button onclick='deleteResult("${result._id}")'>Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Delete result
+async function deleteResult(id) {
+  if (!confirm('Are you sure you want to delete this result?')) return;
+
+  try {
+    await fetch(`/Manageresults/${id}`, { method: 'DELETE' });
+    await fetchAndRenderResults();
+  } catch (err) {
+    alert('Failed to delete result');
+  }
+}
 
         // Initialize charts
         function initializeCharts() {

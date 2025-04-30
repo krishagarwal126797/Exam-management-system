@@ -321,18 +321,30 @@
     </style>
 </head>
 <body>
-  <div class="sidebar">
-    <span class="close-btn"><i class="fa fa-times"></i></span>
-    
-      <div class="logo" style="position: relative; left: 30px;">Exam Manager</div>
-      <ul>
-          <li><a href="dashboard" ><i class="fa fa-tachometer-alt" ></i> Dashboard</a></li>
-          <li class="active"><i class="fa fa-file-alt"></i> Manage Exams</li>
-          <li><i class="fa fa-users"></i> Students</li>
-          <li><i class="fa fa-chart-bar"></i> Results</li>
-          <li><i class="fa fa-cogs"></i> Settings</li>
-      </ul>
-  </div>
+    <div class="sidebar">
+        <span class="close-btn"><i class="fa fa-times"></i></span>
+        <div class="logo" style="position: relative; left: 30px;">Exam Manager</div>
+        <ul>
+          <li class="active">
+            <a href="/Dashboard" style="text-decoration: none; color: #ddd;"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="/Manageexams"  style="text-decoration: none; color: #ddd;"><i class="fa fa-file-alt"></i> Manage Exams</a>
+          </li>
+          <li>
+            <a href="/Managestudents" style="text-decoration: none; color: #ddd;"><i class="fa fa-users"></i> Students</a>
+          </li>
+          <li>
+            <a href="/Manageresults" style="text-decoration: none; color: #ddd;"><i class="fa fa-chart-bar"></i> Results</a>
+          </li>
+          <li>
+            <a href="/Settings"  style="text-decoration: none; color: #ddd;"><i class="fa fa-cogs"></i> Settings</a>
+          </li>
+          <li>
+            <a href="/logout" style="color: red;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
     <div class="toggle-btn"><i class="fa fa-bars"></i></div>
     <div class="dashboard-content">
         <div class="header">
@@ -357,41 +369,137 @@
             <table>
                 <thead>
                     <tr>
+                        <th class="sortable" data-sort="examId">Exam ID</th>
                         <th class="sortable" data-sort="name">Exam Name</th>
+                        <th class="sortable" data-sort="subject">Subject</th>
+                        <th class="sortable" data-sort="classLevel">Class Level</th>
                         <th class="sortable" data-sort="date">Date</th>
+                        <th class="sortable" data-sort="startTime">Start Time</th>
+                        <th class="sortable" data-sort="endTime">End Time</th>
                         <th class="sortable" data-sort="duration">Duration</th>
+                        <th class="sortable" data-sort="totalMarks">Total Marks</th>
+                        <th class="sortable" data-sort="passingMarks">Passing Marks</th>
+                        <th class="sortable" data-sort="location">Location</th>
+                        <th class="sortable" data-sort="invigilator">Invigilator</th>
+                        <th class="sortable" data-sort="status">Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="examTableBody">
-                    <tr>
-                        <td>Math Test</td>
-                        <td>2024-03-05</td>
-                        <td>2 Hours</td>
-                        <td>
-                            <button onclick="editExam(this)" style="background-color: rgb(253, 221, 42); color: #fff;">Edit</button>
-                            <button onclick="confirmDelete(this)" style="background-color: rgb(252, 48, 48); color: #fff;">Delete</button>
-                        </td>
-                    </tr>
+                    <% exams.forEach(exam => { %>
+                        <tr>
+                            <td><%= exam.examId %></td>
+                            <td><%= exam.title%></td>
+                            <td><%= exam.subject %></td>
+                            <td><%= exam.classLevel %></td>
+                            <td><%= exam.date %></td>
+                            <td><%= exam.startTime %></td>
+                            <td><%= exam.endTime %></td>
+                            <td><%= exam.duration %></td>
+                            <td><%= exam.totalMarks %></td>
+                            <td><%= exam.passingMarks %></td>
+                            <td><%= exam.location %></td>
+                            <td><%= exam.invigilator %></td>
+                            <td><%= exam.status %></td>
+                            <td>
+                                <button onclick="editExam(this)" style="background-color: rgb(253, 221, 42); color: #fff;">Edit</button>
+                                <button onclick="confirmDelete(this)" style="background-color: rgb(252, 48, 48); color: #fff;">Delete</button>
+                            </td>
+                        </tr>
+                    <% }); %>
                 </tbody>
             </table>
         </div>
+        
+        
+        
     </div>
 
     <div class="modal" id="examModal">
         <h3 id="modalTitle">Add Exam</h3>
         <form id="examForm" onsubmit="handleExamSubmit(event)">
+            <input type="text" placeholder="Exam ID" id="examId" required>
             <input type="text" placeholder="Exam Name" id="examName" required>
             <div class="error-message" id="nameError"></div>
+    
+            <input type="text" placeholder="Subject" id="subject" required>
+            <input type="text" placeholder="Class Level" id="classLevel" required>
+    
             <input type="date" id="examDate" required>
             <div class="error-message" id="dateError"></div>
-            <input type="text" placeholder="Duration (e.g., 2 Hours)" id="examDuration" required>
-            <div class="error-message" id="durationError"></div>
+    
+            <input type="time" id="startTime" required>
+            <input type="time" id="endTime" required>
+    
+            <input type="number" placeholder="Total Marks" id="totalMarks" required>
+            <input type="number" placeholder="Passing Marks" id="passingMarks" required>
+    
+            <input type="text" placeholder="Location (e.g., Room 101)" id="location" required>
+            <input type="text" placeholder="Invigilator Name" id="invigilator" required>
+    
+            <select id="status" required>
+                <option value="">Select Status</option>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+    
             <button type="submit" id="submitBtn">Add</button>
             <button type="button" onclick="closeModal()">Cancel</button>
         </form>
     </div>
-
+    
+    <script>
+        async function handleExamSubmit(event) {
+            event.preventDefault();
+        
+            const form = event.target;
+            const mode = form.dataset.mode;
+            const id = form.dataset.id;
+        
+            const payload = {
+                examId: document.getElementById('examId').value,
+                title: document.getElementById('examName').value,
+                subject: document.getElementById('subject').value,
+                classLevel: document.getElementById('classLevel').value,
+                date: document.getElementById('examDate').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value,
+                totalMarks: document.getElementById('totalMarks').value,
+                passingMarks: document.getElementById('passingMarks').value,
+                location: document.getElementById('location').value,
+                invigilator: document.getElementById('invigilator').value,
+                status: document.getElementById('status').value,
+            };
+        
+            let url = '/exams/add';
+            let method = 'POST';
+        
+            if (mode === 'edit' && id) {
+                url = `/exams/update/${id}`;
+                method = 'POST';
+            }
+        
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+        
+                if (res.redirected) {
+                    window.location.href = res.url;
+                } else {
+                    const result = await res.json();
+                    alert(result.message || 'Operation failed.');
+                }
+            } catch (err) {
+                console.error('Submission failed:', err);
+                alert('An error occurred.');
+            }
+        }
+        </script>
+        
     <div class="confirm-modal" id="confirmModal">
         <h3>Delete Exam</h3>
         <p>Are you sure you want to delete this exam?</p>
@@ -402,7 +510,47 @@
     </div>
 
     <div class="toast" id="toast"></div>
-
+    <script>
+        function editExam(button) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+        
+            // Fill modal form with row data
+            document.getElementById('examId').value = cells[0].innerText;
+            document.getElementById('examName').value = cells[1].innerText;
+            document.getElementById('subject').value = cells[2].innerText;
+            document.getElementById('classLevel').value = cells[3].innerText;
+            document.getElementById('examDate').value = cells[4].innerText;
+            document.getElementById('startTime').value = cells[5].innerText;
+            document.getElementById('endTime').value = cells[6].innerText;
+            document.getElementById('totalMarks').value = cells[8].innerText;
+            document.getElementById('passingMarks').value = cells[9].innerText;
+            document.getElementById('location').value = cells[10].innerText;
+            document.getElementById('invigilator').value = cells[11].innerText;
+            document.getElementById('status').value = cells[12].innerText;
+        
+            // Set form for update
+            const examUniqueId = cells[0].innerText; // assuming examId is unique and maps to DB _id
+            document.getElementById('examForm').dataset.mode = 'edit';
+            document.getElementById('examForm').dataset.id = examUniqueId;
+        
+            document.getElementById('modalTitle').innerText = "Update Exam";
+            document.getElementById('submitBtn').innerText = "Update";
+        
+            // Open modal
+            document.getElementById('examModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('examModal').style.display = 'none';
+            document.getElementById('examForm').reset();
+            document.getElementById('examForm').removeAttribute('data-mode');
+            document.getElementById('examForm').removeAttribute('data-id');
+            document.getElementById('modalTitle').innerText = "Add Exam";
+            document.getElementById('submitBtn').innerText = "Add";
+        }
+        </script>
+        
     <script>
         let currentSort = { column: '', direction: 'asc' };
         let examToDelete = null;
@@ -450,61 +598,10 @@
             return isValid;
         }
 
-        function handleExamSubmit(event) {
-            event.preventDefault();
-            if (!validateForm()) return;
+      
 
-            const name = document.getElementById('examName').value;
-            const date = document.getElementById('examDate').value;
-            const duration = document.getElementById('examDuration').value;
 
-            if (editingRow) {
-                updateExam(name, date, duration);
-            } else {
-                addExam(name, date, duration);
-            }
-        }
-
-        function addExam(name, date, duration) {
-            const table = document.querySelector('#examTableBody');
-                const row = `<tr>
-                    <td>${name}</td>
-                    <td>${date}</td>
-                    <td>${duration}</td>
-                <td>
-                    <button onclick="editExam(this)" style="background-color: rgb(253, 221, 42); color: #fff;">Edit</button>
-                    <button onclick="confirmDelete(this)" style="background-color: rgb(252, 48, 48); color: #fff;">Delete</button>
-                </td>
-                </tr>`;
-                table.innerHTML += row;
-                closeModal();
-            showToast('Exam added successfully');
-        }
-
-        function updateExam(name, date, duration) {
-            const cells = editingRow.getElementsByTagName('td');
-            cells[0].textContent = name;
-            cells[1].textContent = date;
-            cells[2].textContent = duration;
-            editingRow = null;
-            document.getElementById('modalTitle').textContent = 'Add Exam';
-            document.getElementById('submitBtn').textContent = 'Add';
-            closeModal();
-            showToast('Exam updated successfully');
-        }
-
-        function editExam(button) {
-            editingRow = button.closest('tr');
-            const cells = editingRow.getElementsByTagName('td');
-            
-            document.getElementById('examName').value = cells[0].textContent;
-            document.getElementById('examDate').value = cells[1].textContent;
-            document.getElementById('examDuration').value = cells[2].textContent;
-            
-            document.getElementById('modalTitle').textContent = 'Edit Exam';
-            document.getElementById('submitBtn').textContent = 'Update';
-            openModal();
-        }
+       
 
         function confirmDelete(button) {
             examToDelete = button.closest('tr');
@@ -529,14 +626,7 @@
             document.querySelectorAll('.error-message').forEach(err => err.style.display = 'none');
         }
 
-        function closeModal() {
-            document.getElementById('examModal').style.display = 'none';
-            document.getElementById('examForm').reset();
-            editingRow = null;
-            document.getElementById('modalTitle').textContent = 'Add Exam';
-            document.getElementById('submitBtn').textContent = 'Add';
-        }
-
+    
         // Search and filter functionality
         document.getElementById('searchExam').addEventListener('input', filterTable);
         document.getElementById('filterDuration').addEventListener('change', filterTable);
